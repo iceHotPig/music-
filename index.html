@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Document</title>
+  <script src="./ajax.js"></script>
+  <style>
+    #swrap{
+      width: 1000px;
+      margin: 0 auto;
+    }
+    #list{
+      width: 100%;
+    }
+    #list li{
+      width: 300px;
+      display: inline-block;
+    }
+    #list li img{
+      width: 100%;
+    }
+    #box{
+      margin-left:560px ;
+    }
+  </style>
+  <script>
+    window.onload=function(){
+      var obtn=document.getElementById('btn');
+      var oTxt=document.getElementById('txt');
+      obtn.onclick=function(){
+        if(oTxt.value == ''){
+          alert('你丫啥啊')
+          return false;
+        }
+      ajax({
+         type :'get',
+         url:' https://api.imjad.cn/cloudmusic/?type=search&s='+oTxt.value,
+         async:true,
+         success: function(data){
+            var oul=document.getElementById('list');
+            oul.innerHTML='';
+            for (var i = 0; i < data.result.songs.length; i++) {
+              var li=document.createElement('li');
+              var oimg=document.createElement('img');
+              oimg.setAttribute('src',data.result.songs[i].al.picUrl) ;
+              oimg.setAttribute('data-id',data.result.songs[i].id);
+              li.appendChild(oimg);
+              oul.appendChild(li);
+            }
+          }
+       })
+      var oul=document.getElementById('list');
+      var oimg=document.getElementById('img');
+      oul.onclick=function(){
+        var e=e||window.event;
+        var target=e.srcElement||e.target;
+          if (target.nodeName=='IMG'){
+              // console.log(target.getAttribute('data-id'));
+              ajax({
+                type:'get',
+                url:'https://api.imjad.cn/cloudmusic/?type=song&id='+target.getAttribute('data-id'),
+                async:true,
+                success:function(data){
+                  var oad=document.getElementsByTagName('audio')[0];
+                  oad.setAttribute('src',data.data[0].url)
+                }
+              })
+            }
+          }
+        }
+      }
+  </script>
+</head>
+<body>
+  <div id="box">
+    <input type="text" name="" value="" placeholder="" id="txt">
+    <input type="button" name="" value="提交" id="btn">
+    <audio  controls autoplay>
+    </audio>
+  </div>
+  <div id="swrap">
+    <ul id="list">
+      <li><img src="images/pic7.png" alt=""></li>
+      <li><img src="images/pic7.png" alt=""></li>
+      <li><img src="images/pic7.png" alt=""></li>
+      <li><img src="images/pic7.png" alt=""></li>
+      <li><img src="images/pic7.png" alt=""></li>
+      <li><img src="images/pic7.png" alt=""></li>
+      <li><img src="images/pic7.png" alt=""></li>
+      <li><img src="images/pic7.png" alt=""></li>
+      <li><img src="images/pic7.png" alt=""></li>
+    </ul>
+  </div>
+</body>
+</html>
+
+
